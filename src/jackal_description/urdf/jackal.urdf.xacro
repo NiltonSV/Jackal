@@ -2,6 +2,7 @@
 <robot name="jackal" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:property name="PI" value="3.1415926535897931" />
 
+  <xacro:arg name="namespace" default='' />
   <!-- Jackal properties -->
   <xacro:property name="wheelbase" value="0.262" />
   <xacro:property name="track" value="0.37559" />
@@ -27,7 +28,7 @@
   <!-- Wheels macro -->
   <xacro:macro name="wheel" params="prefix mu *joint_pose">
 
-    <link name="${prefix}_wheel_link">
+    <link name="$(arg namespace)/${prefix}_wheel_link">
       <visual>
         <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
         <geometry>
@@ -52,12 +53,12 @@
     </link>
 
     <joint name="${prefix}_wheel" type="continuous">
-      <parent link="chassis_link"/>
-      <child link="${prefix}_wheel_link" />
+      <parent link="$(arg namespace)/chassis_link"/>
+      <child link="$(arg namespace)/${prefix}_wheel_link" />
       <xacro:insert_block name="joint_pose" />
       <axis xyz="0 1 0" />
     </joint>
-    
+
     <gazebo reference="${prefix}_wheel_link">
       <material>Gazebo/DarkGrey</material>
       <selfCollide>false</selfCollide>
@@ -71,15 +72,15 @@
   </xacro:macro>
 
   <!-- Links and joints -->
-  <link name="base_link"></link>
+  <link name="$(arg namespace)/base_link"></link>
 
   <joint name="base_link_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0" />
-    <parent link="base_link"/>
-    <child link="chassis_link" />
+    <parent link="$(arg namespace)/base_link"/>
+    <child link="$(arg namespace)/chassis_link" />
   </joint>
 
-  <link name="chassis_link">
+  <link name="$(arg namespace)/chassis_link">
     <visual>
       <origin xyz="0 0 ${footprint_vertical_offset}" rpy="${PI/2} 0 ${PI/2}"/>
       <geometry>
@@ -103,7 +104,7 @@
       </inertial>
   </link>
 
-  <link name="front_fender_link">
+  <link name="$(arg namespace)/front_fender_link">
     <visual>
       <geometry>
         <mesh filename="file://$(find jackal_description)/meshes/accessory_fender.stl"/>
@@ -112,20 +113,20 @@
     </visual>
   </link>
 
-  <link name="front_fender_accessory_link"/>
+  <link name="$(arg namespace)/front_fender_accessory_link"/>
   <joint name="front_fender_accessory_joint" type="fixed">
     <origin xyz="0.25629 0 0.07455" rpy="${PI} 0 0" />
-    <parent link="front_fender_link" />
-    <child link="front_fender_accessory_link" />
+    <parent link="$(arg namespace)/front_fender_link" />
+    <child link="$(arg namespace)/front_fender_accessory_link" />
   </joint>
 
   <joint name="front_fender_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <parent link="chassis_link" />
-    <child link="front_fender_link" />
+    <parent link="$(arg namespace)/chassis_link" />
+    <child link="$(arg namespace)/front_fender_link" />
   </joint>
 
-  <link name="rear_fender_link">
+  <link name="$(arg namespace)/rear_fender_link">
     <visual>
       <geometry>
         <mesh filename="file://$(find jackal_description)/meshes/accessory_fender.stl"/>
@@ -134,17 +135,17 @@
     </visual>
   </link>
 
-  <link name="rear_fender_accessory_link"/>
+  <link name="$(arg namespace)/rear_fender_accessory_link"/>
   <joint name="rear_fender_accessory_joint" type="fixed">
     <origin xyz="0.25629 0 0.07455" rpy="${PI} 0 0" />
-    <parent link="rear_fender_link" />
-    <child link="rear_fender_accessory_link" />
+    <parent link="$(arg namespace)/rear_fender_link" />
+    <child link="$(arg namespace)/rear_fender_accessory_link" />
   </joint>
 
   <joint name="rear_fender_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 ${PI}"/>
-    <parent link="chassis_link" />
-    <child link="rear_fender_link" />
+    <parent link="$(arg namespace)/chassis_link" />
+    <child link="$(arg namespace)/rear_fender_link" />
   </joint>
 
   <!-- Wheels links and joints -->
@@ -162,20 +163,21 @@
   </xacro:wheel>
 
   <!-- Default Internal IMU Link -->
-  <link name="imu_link">
+  <link name="$(arg namespace)/imu_link">
     <inertial>
       <mass value="0.001"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <inertia ixx="${dummy_inertia}" ixy="0.0" ixz="0.0" iyy="${dummy_inertia}" iyz="0.0" izz="${dummy_inertia}"/>
     </inertial>
   </link>
+
   <joint name="imu_joint" type="fixed">
-    <parent link="chassis_link" />
-    <child link="imu_link" />
+    <parent link="$(arg namespace)/chassis_link" />
+    <child link="$(arg namespace)/imu_link" />
   </joint>
 
   <!-- Default NAVSAT Link -->
-  <link name="navsat_link">
+  <link name="$(arg namespace)/navsat_link">
     <visual>
       <geometry>
         <cylinder radius="0.026" length="0.016" />
@@ -185,57 +187,58 @@
     </visual>
   </link>
   <joint name="navsat_joint" type="fixed">
-    <parent link="chassis_link" />
-    <child link="navsat_link" />
+    <parent link="$(arg namespace)/chassis_link" />
+    <child link="$(arg namespace)/navsat_link" />
     <origin xyz="-0.180 0.126 0.1815" />
   </joint>
 
-  <link name="mid_mount"></link>
+  <link name="$(arg namespace)/mid_mount"></link>
   <joint name="mid_mount_joint" type="fixed">
-    <parent link="chassis_link" />
-    <child link="mid_mount" />
+    <parent link="$(arg namespace)/chassis_link" />
+    <child link="$(arg namespace)/mid_mount" />
     <origin xyz="0 0 ${chassis_height}" />
   </joint>
 
-  <link name="rear_mount"></link>
+  <link name="$(arg namespace)/rear_mount"></link>
   <joint name="rear_mount_joint" type="fixed">
-    <parent link="mid_mount" />
-    <child link="rear_mount" />
+    <parent link="$(arg namespace)/mid_mount" />
+    <child link="$(arg namespace)/rear_mount" />
     <origin xyz="${-mount_spacing} 0 0" />
   </joint>
 
-  <link name="front_mount"></link>
+  <link name="$(arg namespace)/front_mount"></link>
   <joint name="front_mount_joint" type="fixed">
-    <parent link="mid_mount" />
-    <child link="front_mount" />
+    <parent link="$(arg namespace)/mid_mount" />
+    <child link="$(arg namespace)/front_mount" />
     <origin xyz="${mount_spacing} 0 0" />
   </joint>
 
   <xacro:include filename="$(find jackal_description)/urdf/accessories/camera_mount.urdf.xacro" />
   <xacro:camera_mount prefix="front" tilt="0.2" />
-  
+
   <joint name="front_camera_mount_joint" type="fixed">
     <origin xyz="0 0 0"
             rpy="0 0 0" />
-    <parent link="front_mount" />
-    <child link="front_camera_mount" />
+    <parent link="$(arg namespace)/front_mount" />
+    <child link="$(arg namespace)/front_camera_mount" />
   </joint>
 
   <!-- Realsense D435 -->
-  <!-- <xacro:arg name="use_nominal_extrinsics" default="true"/>
+  <xacro:arg name="use_nominal_extrinsics" default="true"/>
   <xacro:arg name="add_plug" default="true" />
   <xacro:arg name="use_mesh" default="true" />
   <xacro:include filename="$(find jackal_description)/urdf/accessories/_d435.urdf.xacro" />
-  
-  <xacro:sensor_d435 parent="front_camera_beam" use_nominal_extrinsics="$(arg use_nominal_extrinsics)" add_plug="$(arg add_plug)" use_mesh="$(arg use_mesh)">
+
+  <xacro:sensor_d435 parent="front_camera_beam" use_nominal_extrinsics="$(arg use_nominal_extrinsics)"
+                             name="camera" add_plug="$(arg add_plug)" use_mesh="$(arg use_mesh)">
     <origin xyz="0 0 0.04" rpy="0 0 0"/>
-  </xacro:sensor_d435> -->
+  </xacro:sensor_d435>
 
   <!-- Ouster OS1 32SR -->
-  <!-- <xacro:include filename="$(find jackal_description)/urdf/accessories/OS1-32.urdf.xacro" />
-  <xacro:OS1-32 parent="front_camera_mount">
+  <xacro:include filename="$(find jackal_description)/urdf/accessories/OS1-32.urdf.xacro" />
+  <xacro:OS1-32 parent="front_camera_mount" name="os_sensor">
     <origin xyz="0.0 0.0 0.10201" rpy="0 0 0"/>
-  </xacro:OS1-32> -->
+  </xacro:OS1-32>
 
   <!-- Gazebo plugins -->
   <xacro:include filename="$(find jackal_description)/urdf/jackal.gazebo" />

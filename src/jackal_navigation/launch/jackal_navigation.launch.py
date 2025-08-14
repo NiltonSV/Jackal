@@ -52,5 +52,5 @@ def generate_launch_description():
     return LaunchDescription([*args, 
                              nav2_node,
                              OpaqueFunction(function=launch_amcl, args=[nav2_localization_path, use_sim_time]),
-                             twist_remap_node
+                            #  twist_remap_node
                             ])

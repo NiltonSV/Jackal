@@ -58,18 +58,18 @@ aluminum peripherial evaluation case.
     <!-- camera body, with origin at bottom screw mount -->
     <joint name="${name}_joint" type="fixed">
       <xacro:insert_block name="origin" />
-      <parent link="${parent}"/>
-      <child link="${name}_bottom_screw_frame" />
+      <parent link="$(arg namespace)/${parent}"/>
+      <child link="$(arg namespace)/${name}_bottom_screw_frame" />
     </joint>
-    <link name="${name}_bottom_screw_frame"/>
+    <link name="$(arg namespace)/${name}_bottom_screw_frame"/>
 
     <joint name="${name}_link_joint" type="fixed">
       <origin xyz="${d435_mesh_x_offset} ${d435_cam_depth_py} ${d435_cam_depth_pz}" rpy="0 0 0"/>
-      <parent link="${name}_bottom_screw_frame"/>
-      <child link="${name}_link" />
+      <parent link="$(arg namespace)/${name}_bottom_screw_frame"/>
+      <child link="$(arg namespace)/${name}_link" />
     </joint>
 
-    <link name="${name}_link">
+    <link name="$(arg namespace)/${name}_link">
       <visual>
         <xacro:if value="${use_mesh}">
           <!-- the mesh origin is at front plate in between the two infrared camera axes -->
@@ -106,62 +106,62 @@ aluminum peripherial evaluation case.
       <!-- camera depth joints and links -->
       <joint name="${name}_depth_joint" type="fixed">
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <parent link="${name}_link"/>
-        <child link="${name}_depth_frame" />
+        <parent link="$(arg namespace)/${name}_link"/>
+        <child link="$(arg namespace)/${name}_depth_frame" />
       </joint>
-      <link name="${name}_depth_frame"/>
+      <link name="$(arg namespace)/${name}_depth_frame"/>
 
       <joint name="${name}_depth_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-        <parent link="${name}_depth_frame" />
-        <child link="${name}_depth_optical_frame" />
+        <parent link="$(arg namespace)/${name}_depth_frame" />
+        <child link="$(arg namespace)/${name}_depth_optical_frame" />
       </joint>
-      <link name="${name}_depth_optical_frame"/>
+      <link name="$(arg namespace)/${name}_depth_optical_frame"/>
 
       <!-- camera left IR joints and links -->
       <joint name="${name}_infra1_joint" type="fixed">
         <origin xyz="0 ${d435_cam_depth_to_infra1_offset} 0" rpy="0 0 0" />
-        <parent link="${name}_link" />
-        <child link="${name}_infra1_frame" />
+        <parent link="$(arg namespace)/${name}_link" />
+        <child link="$(arg namespace)/${name}_infra1_frame" />
       </joint>
-      <link name="${name}_infra1_frame"/>
+      <link name="$(arg namespace)/${name}_infra1_frame"/>
 
       <joint name="${name}_infra1_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-        <parent link="${name}_infra1_frame" />
-        <child link="${name}_infra1_optical_frame" />
+        <parent link="$(arg namespace)/${name}_infra1_frame" />
+        <child link="$(arg namespace)/${name}_infra1_optical_frame" />
       </joint>
-      <link name="${name}_infra1_optical_frame"/>
+      <link name="$(arg namespace)/${name}_infra1_optical_frame"/>
 
       <!-- camera right IR joints and links -->
       <joint name="${name}_infra2_joint" type="fixed">
         <origin xyz="0 ${d435_cam_depth_to_infra2_offset} 0" rpy="0 0 0" />
-        <parent link="${name}_link" />
-        <child link="${name}_infra2_frame" />
+        <parent link="$(arg namespace)/${name}_link" />
+        <child link="$(arg namespace)/${name}_infra2_frame" />
       </joint>
-      <link name="${name}_infra2_frame"/>
+      <link name="$(arg namespace)/${name}_infra2_frame"/>
 
       <joint name="${name}_infra2_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-        <parent link="${name}_infra2_frame" />
-        <child link="${name}_infra2_optical_frame" />
+        <parent link="$(arg namespace)/${name}_infra2_frame" />
+        <child link="$(arg namespace)/${name}_infra2_optical_frame" />
       </joint>
-      <link name="${name}_infra2_optical_frame"/>
+      <link name="$(arg namespace)/${name}_infra2_optical_frame"/>
 
       <!-- camera color joints and links -->
       <joint name="${name}_color_joint" type="fixed">
         <origin xyz="0 ${d435_cam_depth_to_color_offset} 0" rpy="0 0 0" />
-        <parent link="${name}_link" />
-        <child link="${name}_color_frame" />
+        <parent link="$(arg namespace)/${name}_link" />
+        <child link="$(arg namespace)/${name}_color_frame" />
       </joint>
-      <link name="${name}_color_frame"/>
+      <link name="$(arg namespace)/${name}_color_frame"/>
 
       <joint name="${name}_color_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-        <parent link="${name}_color_frame" />
-        <child link="${name}_color_optical_frame" />
+        <parent link="$(arg namespace)/${name}_color_frame" />
+        <child link="$(arg namespace)/${name}_color_optical_frame" />
       </joint>
-      <link name="${name}_color_optical_frame"/>
+      <link name="$(arg namespace)/${name}_color_optical_frame"/>
     </xacro:if>
 
     <xacro:if value="${add_plug}">
