@@ -2,20 +2,20 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:macro name="control_gazebo">
 
-    <gazebo reference="$(arg namespace)/base_link">
+    <gazebo reference="${ns}base_link">
       <turnGravityOff>false</turnGravityOff>
     </gazebo>
 
-    <gazebo reference="$(arg namespace)/chassis_link">
+    <gazebo reference="${ns}chassis_link">
       <material>Gazebo/DarkGrey</material>
       <turnGravityOff>false</turnGravityOff>
     </gazebo>
 
-    <gazebo reference="$(arg namespace)/imu_link">
+    <gazebo reference="${ns}imu_link">
       <turnGravityOff>false</turnGravityOff>
     </gazebo>
 
-    <gazebo reference="$(arg namespace)/navsat_link">
+    <gazebo reference="${ns}navsat_link">
       <turnGravityOff>false</turnGravityOff>
     </gazebo>
 
@@ -35,14 +35,14 @@
     </gazebo>
 
     <!-- Imu sensor -->
-    <gazebo reference="$(arg namespace)/imu_link">
+    <gazebo reference="${ns}imu_link">
       <gravity>true</gravity>
-      <sensor name="$(arg namespace)/imu_sensor" type="imu">
+      <sensor name="${ns}imu_sensor" type="imu">
           <always_on>true</always_on>
           <update_rate>50</update_rate>
           <visualize>true</visualize>
-          <topic>$(arg namespace)/imu</topic>
-          <gz_frame_id>$(arg namespace)/imu_link</gz_frame_id>
+          <topic>${ns}imu</topic>
+          <gz_frame_id>${ns}imu_link</gz_frame_id>
           <imu>
               <noise>
                   <type>gaussian</type>
@@ -64,13 +64,13 @@
     </gazebo>
 
     <!-- Realsense D435 -->
-    <gazebo reference="$(arg namespace)/camera_link">
-        <sensor name="$(arg namespace)/rgbd_camera" type="rgbd_camera">
-            <topic>$(arg namespace)/rgbd_camera</topic>
+    <gazebo reference="${ns}camera_link">
+        <sensor name="${ns}rgbd_camera" type="rgbd_camera">
+            <topic>${ns}rgbd_camera</topic>
             <always_on>1</always_on>
             <update_rate>30</update_rate>
             <visualize>true</visualize>
-            <gz_frame_id>$(arg namespace)/camera_depth_optical_frame</gz_frame_id>
+            <gz_frame_id>${ns}camera_depth_optical_frame</gz_frame_id>
             <camera>
                 <horizontal_fov>1.134464014</horizontal_fov>
                 <image>

@@ -2,7 +2,7 @@
 
   <xacro:macro name="camera_mount" params="prefix tilt:=0">
 
-    <link name="$(arg namespace)/${prefix}_camera_mount">
+    <link name="${ns}${prefix}_camera_mount">
       <visual>
         <origin xyz="0 0 0" rpy="1.5707 0 1.5707" />
         <geometry>
@@ -12,7 +12,7 @@
       </visual>
     </link>
 
-    <link name="$(arg namespace)/${prefix}_camera_beam">
+    <link name="${ns}${prefix}_camera_beam">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 1.5707" />
         <geometry>
@@ -24,15 +24,15 @@
 
     <joint name="${prefix}_camera_pivot_joint" type="fixed">
       <origin xyz="0.102 0 0.008" rpy="0 ${tilt} 0" />
-      <parent link="$(arg namespace)/${prefix}_camera_mount" />
-      <child link="$(arg namespace)/${prefix}_camera_beam" />
+      <parent link="${ns}${prefix}_camera_mount" />
+      <child link="${ns}${prefix}_camera_beam" />
     </joint>
 
-    <gazebo reference="$(arg namespace)/${prefix}_camera_beam">
+    <gazebo reference="${ns}${prefix}_camera_beam">
       <material>Gazebo/DarkGrey</material>
     </gazebo>
 
-    <gazebo reference="$(arg namespace)/${prefix}_camera_mount">
+    <gazebo reference="${ns}${prefix}_camera_mount">
       <material>Gazebo/DarkGrey</material>
     </gazebo>
 

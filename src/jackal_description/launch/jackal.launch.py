@@ -1,13 +1,12 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction, OpaqueFunction
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution, PythonExpression
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
-
-def print_robot_description(context, *args, **kwargs):
-    print(args[0].perform(context))
+import yaml
+import os
 
 def generate_launch_description():
     
@@ -83,6 +82,21 @@ def generate_launch_description():
         DeclareLaunchArgument('Y', default_value='0.0', description='Robot initial orientation yaw'),
     ]
 
+    # EKF Launch
+    ekf_file = PathJoinSubstitution([packagePath, 'config', 'ekf_parameters.yaml'])
+
+    ekf_node = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(PathJoinSubstitution([packagePath, 'launch', 'jackal_ekf_launch.py'])),
+        launch_arguments={'use_sim_time': use_sim_time, 'ekf_params_file': ekf_file, 'namespace': namespace}.items()
+    )
+    
+    # Twist Remap Node
+    twist_remap_node = Node(
+                    package='jackal_description', executable='twist_to_twiststamped', output='screen',
+                    name='twist_remap', namespace=namespace,
+                    parameters=[{'use_sim_time': use_sim_time}],
+    )
+
     # LAUNCH
     return LaunchDescription([*args,
                              robot_state_node,
@@ -90,4 +104,6 @@ def generate_launch_description():
                              rviz2_node,
                              gazebo_launch,
                              TimerAction(period=5.0, actions=[ros2_control_launch]),
+                             ekf_node,
+                             twist_remap_node,
     ])

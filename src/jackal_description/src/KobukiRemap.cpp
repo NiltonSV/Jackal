@@ -1,6 +1,12 @@
-// The ROS2 navigation system provides velocities through the cmd_vel topic using the Twist message type
-// However, this project uses the TwistStamped message type. Therefore, remapping the topics is necessary 
-// to ensure proper communication.
+/**
+ * @file twist_to_twist_stamped.cpp
+ * @brief ROS2 node to convert Twist messages to TwistStamped messages.
+ *
+ * This node subscribes to velocity commands of type geometry_msgs::msg::Twist 
+ * (commonly published on the /cmd_vel topic by ROS2 navigation stacks)
+ * and republishes them as geometry_msgs::msg::TwistStamped messages.
+ *
+ */
 
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
@@ -12,11 +18,12 @@ public:
   TwistToTwistStamped()
   : Node("twist_to_twist_stamped")
   {
+    // Topics are set withouth / to accept namespace
     cmd_vel_subscriber_ = this->create_subscription<geometry_msgs::msg::Twist>(
-      "/cmd_vel", 10, std::bind(&TwistToTwistStamped::cmd_vel_callback, this, std::placeholders::_1));
+      "cmd_vel", 10, std::bind(&TwistToTwistStamped::cmd_vel_callback, this, std::placeholders::_1));
 
     twist_stamped_publisher_ = this->create_publisher<geometry_msgs::msg::TwistStamped>(
-      "/diff_drive_base_controller/cmd_vel", 10);
+      "diff_drive_base_controller/cmd_vel", 10);
   }
 
 private:

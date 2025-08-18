@@ -29,7 +29,7 @@ def modify_yaml_bridge(context, *args, **kwargs):
         with open(config_file, 'w') as f:
             yaml.dump(new_config, f)
         
-    print(new_config)
+    # print(new_config)
 
     gazebo_bridge_node = Node(
         package='ros_gz_bridge', executable='parameter_bridge', output='screen',
